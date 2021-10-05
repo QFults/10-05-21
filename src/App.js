@@ -1,45 +1,80 @@
 import { useState } from 'react'
-import Navbar from './components/Navbar'
-
-const pages = ['Home', ' Portfolio', 'Contact', 'About']
-const subPages = {
-  category: 'Projects',
-  pages: ['Project 1', 'Project 2', 'Project 3']
-}
-
-const pages1 = ['Home', ' Financial', 'Profile', 'News Feed']
-const subPages1 = {
-  category: 'Shopping',
-  pages: ['View Cart', 'Recent Orders', 'Help']
-}
 
 const App = () => {
 
-  const [countState, setCountState] = useState({
-    count: 0,
-    name: 'John Doe'
+  const [userState, setUserState] = useState({
+    email: '',
+    password: '',
+    users: []
+    // user: {
+    //   email: '',
+    //   password: ''
+    // }
   })
 
-  const handleIncrement = () => {
-    setCountState({ ...countState, count: countState.count + 1 })
+  const handleInputChange = ({ target }) => {
+    setUserState({ ...userState, [target.name]: target.value })
+  }
+
+  const handleSignIn = event => {
+    event.preventDefault()
+    const users = JSON.parse(JSON.stringify(userState.users))
+    users.push({
+      email: userState.email,
+      password: userState.password
+    })
+    setUserState({ ...userState, users, email: '', password: '' })
+    // setUserState({
+    //   ...userState,
+    //   user: {
+    //     email: userState.email,
+    //     password: userState.password
+    //   },
+    //   email: '',
+    //   password: ''
+    // })
   }
 
   return (
     <>
-      {/* <Navbar
-        name="My First App"
-        pages={pages}
-        subPages={subPages} />
-      <Navbar
-        name="My Shop"
-        pages={pages1}
-        subPages={subPages1} /> */}
-        <h1>{countState.name}</h1>
-      <h1>Count: {countState.count}</h1>
-      <button
-        onClick={handleIncrement} >
-        +
-      </button>
+      <form>
+        <p>
+          <label htmlFor="email">email</label>
+          <input 
+            type="text" 
+            name="email"
+            value={userState.email}
+            onChange={handleInputChange} />
+        </p>
+        <p>
+          <label htmlFor="password">password</label>
+          <input 
+            type="password" 
+            name="password" 
+            id="password"
+            value={userState.password}
+            onChange={handleInputChange} />
+        </p>
+        <p>
+          <button
+            onClick={handleSignIn} >
+            Sign In
+          </button>
+        </p>
+      </form>
+      <div>
+        {/* <h5>Email: {userState.user.email}</h5>
+        <h5>Password: {userState.user.password}</h5> */}
+        {
+          userState.users.map(user => (
+            <div>
+              <h5>Email: {user.email}</h5>
+              <h5>Password: {user.password}</h5>
+              <hr />
+            </div>
+          ))
+        }
+      </div>
     </>
   )
 }
